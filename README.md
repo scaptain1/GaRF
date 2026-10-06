@@ -41,7 +41,7 @@ fused to obtain the representation used by the downstream toxicity classifier.
 ## GaRF Architecture
 
 <p align="center">
-  <img src="figures/GaRF_methodology.png" width="750"/>
+  <img src="figures/Norm_aware_framework.drawio.pdf" width="750"/>
 </p>
 
 <p align="center">
