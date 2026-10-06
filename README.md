@@ -41,12 +41,11 @@ fused to obtain the representation used by the downstream toxicity classifier.
 ## GaRF Architecture
 
 <p align="center">
-  <img src="./figures/Norm_aware_framework.drawio.pdf" width="750"/>
+  <img src="figures/Norm_aware_framework.drawio.pdf" width="750" alt="GaRF Architecture"/>
 </p>
 
 <p align="center">
-<b>Figure 1.</b> Overview of the proposed Geometry-aware Representation
-Framework (GaRF).
+  <b>Figure 1.</b> Overview of the proposed Geometry-aware Representation Framework (GaRF).
 </p>
 
 Given an input text, a pretrained transformer generates contextualized hidden
