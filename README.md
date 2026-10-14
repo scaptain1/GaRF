@@ -9,7 +9,6 @@ GaRF explicitly decomposes contextual representations into **directional** and *
 - **Implicit-toxic**
 - **Non-toxic**
 
----
 
 ## 🔍 Overview
 
@@ -33,7 +32,8 @@ These components are independently projected and subsequently fused to obtain a 
 ## 🏗️ GaRF Architecture
 
 <p align="center">
-  <img src="figures/garf_architecture.png" width="750" alt="GaRF Architecture"/>
+  <img src="figures/Norm
+    _aware_framework.drawio.pdf" width="750" alt="GaRF Architecture"/>
 </p>
 
 <p align="center">
@@ -100,44 +100,11 @@ The experimental evaluation includes:
 - Implicit toxicity detection
 - Controlled representation ablation studies
 - Multi-seed evaluation
-- Transformer-backbone analysis
-- Computational-efficiency analysis
-- Explainability and faithfulness analysis
 
 The evaluation considers classification accuracy, Macro-F1, implicit-toxic recall, misclassification rate (MCR), benign false-positive rate (FPR), and ROC-AUC.
 
 ---
 
-## ⚙️ Instructions to Run the Code
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/scaptain1/GaRF.git
-cd GaRF
-```
-
-### 2. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 3. Run GaRF Classification
-
-```bash
-python code/garf_multilayer_toxicity_classification.py
-```
-
-### 4. Run the Heterogeneous Ablation Study
-
-```bash
-python code/garf_heterogeneous_ablation.py --data data/Toxicity_Data_Shuffled1.csv
-```
-
-**Note:** Dataset files and pretrained transformer checkpoints must be available as required by the corresponding scripts. GPU acceleration is recommended for transformer feature extraction.
-
----
 
 ## 📖 Documentation
 
