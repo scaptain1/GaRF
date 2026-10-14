@@ -32,8 +32,7 @@ These components are independently projected and subsequently fused to obtain a 
 ## 🏗️ GaRF Architecture
 
 <p align="center">
-  <img src="figures/Norm
-    _aware_framework.drawio.pdf" width="750" alt="GaRF Architecture"/>
+  <img src="figures/Norm_aware_framework.drawio.pdf" width="750" alt="GaRF Architecture"/>
 </p>
 
 <p align="center">
@@ -117,11 +116,6 @@ Additional documentation describes the methodology, dataset preparation, experim
 
 ---
 
-## 📚 Citation
-
-If you use GaRF in your research, please cite our work.
-
-Citation information will be updated following publication.
 
 ---
 
