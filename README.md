@@ -1,88 +1,72 @@
-# GaRF: Geometry-aware Representation Framework for Implicit Toxicity Detection
 
-Official implementation of **GaRF (Geometry-aware Representation Framework)**,
-a lightweight framework for improving implicit toxicity detection by exploiting
-the geometry of transformer hidden representations.
+# 🧠 GaRF: Geometry-aware Representation Framework for Implicit Toxicity Detection
 
-GaRF explicitly decomposes contextual representations into **directional** and
-**magnitude** components and combines them through a lightweight projection-fusion
-module for three-class toxicity classification:
+Official implementation of **GaRF (Geometry-aware Representation Framework)**, a lightweight and model-agnostic framework for improving implicit toxicity detection by exploiting the geometric properties of transformer hidden representations.
 
-- Explicit-toxic
-- Implicit-toxic
-- Non-toxic
+GaRF explicitly decomposes contextual representations into **directional** and **magnitude** components and combines them through a lightweight projection-fusion module for three-class toxicity classification:
 
-## Overview
-
-Transformer-based toxicity classifiers achieve strong performance on explicitly
-toxic content, but implicit toxicity remains challenging because harmful intent
-may be expressed through stereotypes, sarcasm, euphemisms, coded language, or
-dog whistles without explicit toxic lexical cues.
-
-GaRF approaches this problem from a representation-geometric perspective.
-Our analysis indicates that implicit-toxic samples exhibit reduced directional
-consistency and greater geometric dispersion in transformer representation
-space, increasing their overlap with non-toxic representations.
-
-Rather than modifying the transformer architecture or requiring a larger
-language model, GaRF transforms the hidden representations produced by an
-existing transformer encoder into geometry-aware features.
-
-The framework separates each selected hidden representation into:
-
-1. **Direction** — the normalized orientation of the representation.
-2. **Magnitude** — its L2 norm.
-
-These complementary components are independently projected and subsequently
-fused to obtain the representation used by the downstream toxicity classifier.
+- **Explicit-toxic**
+- **Implicit-toxic**
+- **Non-toxic**
 
 ---
 
-## GaRF Architecture
+## 🔍 Overview
+
+Transformer-based toxicity classifiers achieve strong performance on explicitly toxic content. However, detecting **implicit toxicity** remains challenging because harmful intent may be conveyed through stereotypes, sarcasm, euphemisms, coded language, or dog whistles without explicit toxic lexical cues.
+
+GaRF addresses this challenge from a **representation-geometric perspective**.
+
+Our analysis indicates that implicit-toxic samples exhibit reduced directional consistency and greater geometric dispersion in transformer representation space, increasing their overlap with non-toxic representations.
+
+Rather than modifying the transformer architecture or requiring a larger language model, GaRF transforms the hidden representations produced by an existing transformer encoder into geometry-aware features.
+
+The framework separates each selected hidden representation into:
+
+1. **Direction:** The normalized orientation of the representation.
+2. **Magnitude:** The L2 norm of the representation.
+
+These components are independently projected and subsequently fused to obtain a discriminative representation for downstream toxicity classification.
+
+---
+
+## 🏗️ GaRF Architecture
 
 <p align="center">
-  <img src="figures/Norm_aware_framework.drawio.pdf" width="750" alt="GaRF Architecture"/>
+  <img src="figures/garf_architecture.png" width="750" alt="GaRF Architecture"/>
 </p>
 
 <p align="center">
   <b>Figure 1.</b> Overview of the proposed Geometry-aware Representation Framework (GaRF).
 </p>
 
-Given an input text, a pretrained transformer generates contextualized hidden
-representations across its layers. GaRF extracts the CLS representations from
-selected layers and decomposes each representation into its directional and
-magnitude components.
+Given an input text, a pretrained transformer generates contextualized hidden representations across its layers. GaRF extracts the CLS representations from selected layers and decomposes each representation into its directional and magnitude components.
 
 For a hidden representation **hₗ** from layer *l*:
 
-**Magnitude**
+**Magnitude:**
 
-rₗ = ||hₗ||₂
+`rₗ = ||hₗ||₂`
 
-**Direction**
+**Direction:**
 
-uₗ = hₗ / ||hₗ||₂
+`uₗ = hₗ / ||hₗ||₂`
 
-such that:
+Such that:
 
-hₗ = rₗuₗ
+`hₗ = rₗuₗ`
 
-The directional and magnitude representations from the selected transformer
-layers are aggregated and passed through separate projection networks.
+The directional and magnitude representations from selected transformer layers are aggregated and processed through separate projection networks.
 
-The projected components are subsequently combined using GaRF's fusion
-mechanism and supplied to the classification head.
+The projected components are subsequently combined using **element-wise multiplicative fusion** and supplied to a classification head.
 
-Importantly, GaRF operates on representations generated by the transformer
-rather than modifying the underlying transformer architecture. This enables
-the framework to be used with different transformer backbones while adding
-only a lightweight representation-processing module.
+Importantly, GaRF operates on representations generated by the transformer without modifying the underlying encoder architecture. This makes it a **plug-and-play representation-processing framework** that can be integrated with compatible transformer-based classification models.
 
 ---
 
-## Classification Task
+## 🎯 Classification Task
 
-The experiments use a three-class toxicity formulation:
+GaRF is evaluated using a three-class toxicity classification formulation.
 
 | Class | Description |
 |---|---|
@@ -90,55 +74,83 @@ The experiments use a three-class toxicity formulation:
 | **Implicit-toxic** | Toxicity conveyed indirectly through contextual or semantic cues |
 | **Non-toxic** | Text without toxic intent |
 
----
-
-## Repository Structure
-
-    GaRF/
-    ├── code/               # GaRF implementation and training code
-    ├── notebooks/          # Experimental and analysis notebooks
-    ├── figures/            # Architecture and analysis figures
-    ├── results/            # Experimental results
-    ├── docs/               # Detailed documentation
-    ├── requirements.txt
-    ├── CITATION.cff
-    ├── LICENSE
-    └── README.md
+The primary objective is to improve the detection of implicit-toxic content while minimizing toxic-to-benign misclassification.
 
 ---
 
-## Documentation
+## ✨ Key Features
 
-Detailed information is provided in:
-
-- `docs/METHODOLOGY.md` — GaRF architecture and mathematical formulation
-- `docs/DATASETS.md` — datasets, label mappings, preprocessing, and splits
-- `docs/EXPERIMENTS.md` — experimental settings and evaluation protocol
-- `docs/REPRODUCIBILITY.md` — instructions for reproducing the reported results
+- **Geometry-aware representation learning:** Explicitly models the directional and magnitude characteristics of transformer hidden representations.
+- **Multi-layer feature aggregation:** Exploits contextual representations from multiple transformer layers.
+- **Lightweight architecture:** Introduces a compact projection-fusion module without retraining the underlying transformer encoder.
+- **Model-agnostic integration:** Can be adapted to different transformer-based encoders.
+- **Plug-and-play framework:** Can be incorporated into existing compatible classification pipelines.
+- **Implicit toxicity detection:** Focuses on identifying semantically harmful content that lacks overt toxic expressions.
+- **Reproducible evaluation:** Includes controlled ablation studies, multi-seed experiments, and computational-efficiency analysis.
 
 ---
 
-## Experimental Evaluation
+## 📊 Experimental Evaluation
 
-GaRF is evaluated across multiple toxicity datasets under both homogeneous and
-heterogeneous data settings.
+GaRF is evaluated across multiple toxicity datasets under both **homogeneous** and **heterogeneous** data settings.
 
-The evaluation includes:
+The experimental evaluation includes:
 
 - Three-class toxicity classification
-- Implicit-toxicity detection
-- Controlled ablation studies
+- Implicit toxicity detection
+- Controlled representation ablation studies
 - Multi-seed evaluation
 - Transformer-backbone analysis
 - Computational-efficiency analysis
 - Explainability and faithfulness analysis
 
-Detailed experimental results and reproduction instructions will be provided
-in the corresponding documentation and experiment directories.
+The evaluation considers classification accuracy, Macro-F1, implicit-toxic recall, misclassification rate (MCR), benign false-positive rate (FPR), and ROC-AUC.
 
 ---
 
-## Citation
+## ⚙️ Instructions to Run the Code
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/scaptain1/GaRF.git
+cd GaRF
+```
+
+### 2. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Run GaRF Classification
+
+```bash
+python code/garf_multilayer_toxicity_classification.py
+```
+
+### 4. Run the Heterogeneous Ablation Study
+
+```bash
+python code/garf_heterogeneous_ablation.py --data data/Toxicity_Data_Shuffled1.csv
+```
+
+**Note:** Dataset files and pretrained transformer checkpoints must be available as required by the corresponding scripts. GPU acceleration is recommended for transformer feature extraction.
+
+---
+
+## 📖 Documentation
+
+Additional documentation describes the methodology, dataset preparation, experimental configuration, and reproducibility procedures.
+
+- **Methodology:** Architecture and mathematical formulation of GaRF.
+- **Datasets:** Dataset sources, class mappings, preprocessing, and split configurations.
+- **Experiments:** Training settings, evaluation metrics, and ablation configurations.
+- **Reproducibility:** Instructions for reproducing the reported experimental results.
+
+---
+
+## 📚 Citation
 
 If you use GaRF in your research, please cite our work.
 
@@ -146,6 +158,6 @@ Citation information will be updated following publication.
 
 ---
 
-## License
+## 📄 License
 
 License information is provided in the `LICENSE` file.
